@@ -6,6 +6,9 @@ const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 
+const pgSession = require("connect-pg-simple")(session); // ADDED: for persistent sessions
+const db = require("./db/db");
+
 const stripe = require("stripe")(`${process.env.STRIPE_KEY}`, {
   apiVersion: "2025-03-31.basil",
 });
@@ -20,7 +23,7 @@ const cartRouter = require("./routes/cartRoutes");
 const orderRouter = require("./routes/orderRoutes");
 const webhookRouter = require("./routes/webhookRoutes");
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 initializePassport(passport);
 
@@ -51,14 +54,29 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "my_secret",
-    resave: false,
-    saveUninitialized: false,
+    // Use the pgSession store, connecting it to your existing PostgreSQL pool
+    store: new pgSession({
+      pool: db.pool, // Assumes your db.js exports a 'pool' property (see Step 4)
+      tableName: "session", // Matches the table name you created in Step 2
+    }),
+    // Session secret: MUST be a strong, random string.
+    // Use an environment variable for production, fallback to a dev secret.
+    secret:
+      process.env.SESSION_SECRET ||
+      "a_very_strong_development_secret_that_is_long_and_random",
+    resave: false, // Prevents saving session if not modified
+    saveUninitialized: false, // Prevents creating sessions for unauthenticated users
     cookie: {
-      secure: false,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // Session expiration time (1 day in milliseconds)
+      httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+      // 'secure' must be true in production when using HTTPS
+      // process.env.NODE_ENV is typically 'production' on Render
+      secure: process.env.NODE_ENV === "production",
+      // 'SameSite' protects against CSRF. 'Lax' is often good, 'None' requires 'secure: true'
+      // and explicit CSRF protection if your frontend and backend are on different domains.
+      sameSite: "Lax",
     },
+    name: "connect.sid", // Default name for the session cookie
   })
 );
 

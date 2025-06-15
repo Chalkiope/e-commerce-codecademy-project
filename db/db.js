@@ -11,4 +11,7 @@ const query = (text, params, callback) => {
   return pool.query(text, params, callback);
 };
 
-module.exports = { query };
+module.exports = {
+  query, // Export your query helper
+  pool, // ADDED: Export the pool instance itself for session store
+};
