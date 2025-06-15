@@ -3,12 +3,11 @@ import { ProductType } from "../ProductPage";
 import { notFound } from "next/navigation";
 import SingleProductPage from "./SingleProductPage";
 
-type Props = {
-  params: { id: string };
-};
+type Params = Promise<{ id: string }>;
 
-export default async function page({ params }: Props) {
-  const id: number = Number(params.id);
+export default async function page(props: { params: Params }) {
+  const params = await props.params;
+  const id = Number(params.id);
   // const product = null;
   const product: ProductType | null = await getProductById(id);
   console.log(params);
