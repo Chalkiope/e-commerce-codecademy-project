@@ -16,7 +16,9 @@ orderRouter.get("/", async (req, res, next) => {
     const response = await getOrdersWithItems(user);
     console.log(`Response: ${response}`);
     if (response === null) {
-      return res.status(200).send("No orders placed yet");
+      return res
+        .status(200)
+        .json({ message: "No orders placed yet", orders: [] });
     }
     return res.status(200).send(response);
   } catch (error) {
