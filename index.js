@@ -27,6 +27,7 @@ const port = process.env.PORT || 3000;
 
 initializePassport(passport);
 
+app.set("trust-proxy", 1);
 app.use(
   cors({
     origin: process.env.FRONT_END_URL, // your frontend URL
@@ -74,7 +75,7 @@ app.use(
       secure: process.env.NODE_ENV === "production",
       // 'SameSite' protects against CSRF. 'Lax' is often good, 'None' requires 'secure: true'
       // and explicit CSRF protection if your frontend and backend are on different domains.
-      sameSite: "Lax",
+      sameSite: "none",
     },
     name: "connect.sid", // Default name for the session cookie
   })
