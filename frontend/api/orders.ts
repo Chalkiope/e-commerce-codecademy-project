@@ -1,8 +1,7 @@
 import { fetchWithAuth } from "./utils/fetchWithAuth";
 
-export const getOrders = async (cookieHeaderString: string) => {
+export const getOrders = async () => {
   const response = await fetchWithAuth(`/orders`, {
-    serverCookie: cookieHeaderString, // Pass the cookie string to fetchWithAuth
     cache: "no-store", // Ensures the data is always fresh
   });
   if (response.ok) {
@@ -12,9 +11,8 @@ export const getOrders = async (cookieHeaderString: string) => {
   return null;
 };
 
-export const createOrder = async (cookieHeaderString: string) => {
+export const createOrder = async () => {
   const response = await fetchWithAuth("/orders", {
-    serverCookie: cookieHeaderString,
     method: "POST",
     cache: "no-store",
   });
