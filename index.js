@@ -27,7 +27,7 @@ const port = process.env.PORT || 3000;
 
 initializePassport(passport);
 
-app.set("trust-proxy", 1);
+app.set("trust proxy", true);
 app.use(
   cors({
     origin: process.env.FRONT_END_URL, // your frontend URL
