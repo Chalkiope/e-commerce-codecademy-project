@@ -13,8 +13,8 @@ export default function Page() {
     const getOrderData = async () => {
       try {
         const ordersData = await getOrders();
-        if (ordersData && ordersData.orders.length > 0) {
-          setOrders(ordersData.orders);
+        if (ordersData && ordersData.length > 0) {
+          setOrders(ordersData);
         } else {
           console.warn("No orders found");
           // router.push("/login");
