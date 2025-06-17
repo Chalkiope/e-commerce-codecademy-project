@@ -21,11 +21,11 @@ const getProductById = async (req, res, next) => {
 };
 
 const createProduct = (req, res, next) => {
-  const { name, stock_available, description } = req.body;
+  const { name, stock_available, description, price } = req.body;
 
   db.query(
-    "INSERT INTO products (name, stock_available, description) VALUES ($1, $2, $3) RETURNING *",
-    [name, stock_available, description],
+    "INSERT INTO products (name, stock_available, description, price) VALUES ($1, $2, $3, $4) RETURNING *",
+    [name, stock_available, description, price],
     (error, results) => {
       if (error) {
         throw error;
@@ -37,11 +37,11 @@ const createProduct = (req, res, next) => {
 
 const updateProduct = (req, res, next) => {
   const id = parseInt(req.params.id);
-  const { name, stock_available, description } = req.body;
+  const { name, stock_available, description, price } = req.body;
 
   db.query(
-    "UPDATE products SET name = $1, stock_available = $2, description = $3 WHERE id = $4",
-    [name, stock_available, description, id],
+    "UPDATE products SET name = $1, stock_available = $2, description = $3, price = $4 WHERE id = $5",
+    [name, stock_available, description, price, id],
     (error, results) => {
       if (error) {
         throw error;
