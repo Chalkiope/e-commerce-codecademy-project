@@ -1,12 +1,8 @@
 "use client";
-// import { cookies } from "next/headers";
 import { useRouter } from "next/navigation";
-// import { fetchWithAuth } from "@/api/utils/fetchWithAuth";
 import { CartPage } from "./CartPage";
 import { useEffect, useState } from "react";
 import { getCart } from "@/api/cart";
-
-// to do: overlap with cart.ts method, clean up
 
 export default function Page() {
   const [cartData, setCartData] = useState([]);

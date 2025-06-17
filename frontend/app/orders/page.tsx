@@ -16,8 +16,8 @@ export default function Page() {
         if (ordersData && ordersData.orders.length > 0) {
           setOrders(ordersData.orders);
         } else {
-          console.warn("No orders found, redirecting.");
-          router.push("/login");
+          console.warn("No orders found");
+          // router.push("/login");
         }
       } catch (error) {
         console.error("Error fetching orders:", error);

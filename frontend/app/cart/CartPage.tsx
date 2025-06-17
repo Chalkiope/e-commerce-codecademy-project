@@ -3,6 +3,7 @@ import { useState } from "react";
 import { CartItem } from "./CartItem";
 import { deleteCartItem, updateCartItem } from "@/api/cart";
 import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export interface CartType {
   id: number;
@@ -17,6 +18,7 @@ export interface CartType {
 
 export const CartPage = ({ cartData }: { cartData: CartType[] }) => {
   const [cart, setCart] = useState<CartType[] | null>(cartData || []);
+  const router = useRouter();
 
   const handleUpdateCartItem = async (product_id: number, amount: number) => {
     const response = await updateCartItem(product_id, amount);
@@ -58,7 +60,7 @@ export const CartPage = ({ cartData }: { cartData: CartType[] }) => {
         })}
       </div>
       <div className="my-4">
-        <Button href="/checkout" variant="contained">
+        <Button onClick={() => router.push("/checkout")} variant="contained">
           Checkout
         </Button>
       </div>
